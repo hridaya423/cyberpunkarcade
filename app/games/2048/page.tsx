@@ -89,9 +89,12 @@ const CyberpunkNexus: React.FC = () => {
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [win, setWin] = useState<boolean>(false);
   const [highScore, setHighScore] = useState<number>(() => {
+  if (typeof window !== 'undefined') {
     const saved = localStorage.getItem('CyberpunkNexusHighScore');
     return saved ? parseInt(saved, 10) : 0;
-  });
+  }
+  return 0;
+});
 
   const handleMove = useCallback((direction: 'left' | 'right' | 'up' | 'down') => {
     let processedGrid: GridCell[][] = grid.map(row => 
