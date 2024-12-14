@@ -8,7 +8,7 @@ Welcome to the Cyberpunk Arcade - a neon-drenched digital playground featuring c
 - Jigsaw Puzzle: Piece together dystopian landscapes
 - 2048: Merge tiles in a digital grid
 - Snake: Navigate the neon snake through a digital realm
-- Chess: Strategic battles (can be a bit buggy, TODO)
+- Chess: Strategic battles (currently all commented since too many bugs)
 
 ## 🚀 Technologies
 
@@ -39,9 +39,6 @@ npm run dev
 # or
 yarn dev
 Open http://localhost:3000 in your browser to explore the Cyberpunk Arcade!
-🚧 Known Issues
 
-Chess Game: Currently experiencing some bugs
-
-Potential issues with move validation
-Incomplete game state management
+## 🚧 Known Issues
+Chess isnt functioning
