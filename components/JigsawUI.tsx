@@ -3,7 +3,6 @@
 'use client'
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Shuffle, RotateCcw, Eye, EyeOff, Volume2, VolumeX, Layers } from 'lucide-react';
-import DynamicGridOverlay from '@/components/DynamicGridOverlay';
 
 type PuzzlePiece = {
   id: number;
@@ -43,16 +42,30 @@ const JigsawPuzzle = ({ customImageUrl, initialSize = 3 }: JigsawPuzzleProps) =>
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [imageUrl, setImageUrl] = useState(customImageUrl || DEMO_IMAGES[0]);
   const puzzleRef = useRef<HTMLDivElement>(null);
-
-  // Sound effects with improved audio handling
-  const audioContext = useRef<AudioContext>(new AudioContext());
   
-  const playSound = (frequency: number, duration: number) => {
-    if (!soundEnabled) return;
-    try {
-      if (!audioContext.current) {
-        audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+  // Sound effects with client-side check
+  const audioContext = useRef<AudioContext | null>(null);
+  
+  const initAudioContext = useCallback(() => {
+    // Only initialize AudioContext on the client side
+    if (typeof window !== 'undefined') {
+      const AudioContextConstructor = window.AudioContext || (window as any).webkitAudioContext;
+      if (AudioContextConstructor) {
+        audioContext.current = new AudioContextConstructor();
       }
+    }
+  }, []);
+
+  const playSound = (frequency: number, duration: number) => {
+    if (!soundEnabled || typeof window === 'undefined') return;
+
+    try {
+      // Lazy initialize audio context
+      if (!audioContext.current) {
+        initAudioContext();
+      }
+
+      if (!audioContext.current) return;
       
       const oscillator = audioContext.current.createOscillator();
       const gainNode = audioContext.current.createGain();
@@ -128,6 +141,9 @@ const JigsawPuzzle = ({ customImageUrl, initialSize = 3 }: JigsawPuzzleProps) =>
       playCompleteSound();
     }
   }, [pieces, isComplete]);
+  useEffect(() => {
+    initAudioContext();
+  }, [initAudioContext]);
 
   // Generate random cyberpunk-like image
   const generateRandomImage = () => {
