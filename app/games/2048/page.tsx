@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Zap, RefreshCw, Share2 } from 'lucide-react';
+import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Zap, RefreshCw } from 'lucide-react';
 
 const SIZE = 4;
 
@@ -52,7 +52,7 @@ const moveLeft = (grid: GridCell[][]): { newGrid: GridCell[][]; moved: boolean }
   let moved = false;
   const newGrid = grid.map(row => {
     // Remove zeros
-    let filteredRow = row.filter(cell => cell.value !== 0);
+    const filteredRow = row.filter(cell => cell.value !== 0);
     
     // Merge adjacent cells with the same value
     for (let i = 0; i < filteredRow.length - 1; i++) {
