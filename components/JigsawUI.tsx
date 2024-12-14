@@ -45,7 +45,7 @@ const JigsawPuzzle = ({ customImageUrl, initialSize = 3 }: JigsawPuzzleProps) =>
   const puzzleRef = useRef<HTMLDivElement>(null);
 
   // Sound effects with improved audio handling
-  const audioContext = useRef<AudioContext>();
+  const audioContext = useRef<AudioContext>(new AudioContext());
   
   const playSound = (frequency: number, duration: number) => {
     if (!soundEnabled) return;
