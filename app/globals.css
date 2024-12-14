@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes backgroundPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes subtleNoise {
+  0%, 100% { filter: brightness(100%); }
+  50% { filter: brightness(105%); }
+}
+
+@keyframes moveGrid {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+@keyframes textShimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 100% 0; }
+}
