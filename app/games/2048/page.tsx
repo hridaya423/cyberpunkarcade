@@ -7,8 +7,8 @@ const SIZE = 4;
 
 interface GridCell {
   value: number;
-  isNew?: boolean;
-  isMerged?: boolean;
+  isNew: boolean;
+  isMerged: boolean;
 }
 
 const getInitialGrid = (): GridCell[][] => {
@@ -21,7 +21,7 @@ const getInitialGrid = (): GridCell[][] => {
 };
 
 const addRandomTile = (grid: GridCell[][]) => {
-  const emptyCells = [];
+  const emptyCells: { row: number; col: number }[] = [];
   for (let row = 0; row < SIZE; row++) {
     for (let col = 0; col < SIZE; col++) {
       if (grid[row][col].value === 0) {
@@ -41,7 +41,7 @@ const addRandomTile = (grid: GridCell[][]) => {
 };
 
 const transposeGrid = (grid: GridCell[][]): GridCell[][] => {
-  return grid[0].map((_, colIndex) => grid.map(row => row[colIndex]));
+  return grid[0].map((_, colIndex) => grid.map(row => ({ ...row[colIndex] })));
 };
 
 const reverseGrid = (grid: GridCell[][]): GridCell[][] => {
@@ -57,8 +57,11 @@ const moveLeft = (grid: GridCell[][]): { newGrid: GridCell[][]; moved: boolean }
     // Merge adjacent cells with the same value
     for (let i = 0; i < filteredRow.length - 1; i++) {
       if (filteredRow[i].value === filteredRow[i + 1].value) {
-        filteredRow[i].value *= 2;
-        filteredRow[i].isMerged = true;
+        filteredRow[i] = {
+          value: filteredRow[i].value * 2,
+          isNew: false,
+          isMerged: true
+        };
         filteredRow.splice(i + 1, 1);
         moved = true;
       }
@@ -82,16 +85,18 @@ const moveLeft = (grid: GridCell[][]): { newGrid: GridCell[][]; moved: boolean }
 
 const CyberpunkNexus: React.FC = () => {
   const [grid, setGrid] = useState<GridCell[][]>(getInitialGrid);
-  const [score, setScore] = useState(0);
-  const [gameOver, setGameOver] = useState(false);
-  const [win, setWin] = useState(false);
-  const [highScore, setHighScore] = useState(() => {
+  const [score, setScore] = useState<number>(0);
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [win, setWin] = useState<boolean>(false);
+  const [highScore, setHighScore] = useState<number>(() => {
     const saved = localStorage.getItem('CyberpunkNexusHighScore');
     return saved ? parseInt(saved, 10) : 0;
   });
 
   const handleMove = useCallback((direction: 'left' | 'right' | 'up' | 'down') => {
-    let processedGrid = [...grid.map(row => row.map(cell => ({ ...cell, isNew: false, isMerged: false })))];
+    let processedGrid: GridCell[][] = grid.map(row => 
+      row.map(cell => ({ ...cell, isNew: false, isMerged: false }))
+    );
     let moved = false;
 
     if (direction === 'left') {
