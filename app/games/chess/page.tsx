@@ -222,3 +222,13 @@
 // };
 
 // export default CyberpunkChess;
+
+const CyberpunkChess: React.FC = () => {
+  return (
+    <div>
+      Chess development here
+    </div>
+    )
+}
+
+export default CyberpunkChess
